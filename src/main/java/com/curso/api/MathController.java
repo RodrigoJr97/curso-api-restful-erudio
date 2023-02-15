@@ -22,6 +22,64 @@ public class MathController {
         return convertToDouble(numberOne) + convertToDouble(numberTwo);
     }
 
+    @GetMapping("/sub/{numberOne}/{numberTwo}")
+    public Double sub(@PathVariable String numberOne, @PathVariable String numberTwo) throws Exception{
+
+        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+            throw new UnsupportedMathOperationException("Defina um valor númerico!");
+        }
+
+        return convertToDouble(numberOne) - convertToDouble(numberTwo);
+    }
+
+    @GetMapping("/multi/{numberOne}/{numberTwo}")
+    public Double multi(@PathVariable String numberOne, @PathVariable String numberTwo) throws Exception{
+
+        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+            throw new UnsupportedMathOperationException("Defina um valor númerico!");
+        }
+
+        return convertToDouble(numberOne) * convertToDouble(numberTwo);
+    }
+
+    @GetMapping("/div/{numberOne}/{numberTwo}")
+    public Double div(@PathVariable String numberOne, @PathVariable String numberTwo) throws Exception{
+
+        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+            throw new UnsupportedMathOperationException("Defina um valor númerico!");
+        }
+
+        Double numOne = convertToDouble(numberOne);
+        Double numTwo = convertToDouble(numberTwo);
+
+        if (numOne == 0 || numTwo == 0) {
+            throw new UnsupportedMathOperationException("Não é possível dividir por 0!");
+        }
+
+        return numOne / numTwo;
+    }
+
+    @GetMapping("/media/{numberOne}/{numberTwo}")
+    public Double media(@PathVariable String numberOne, @PathVariable String numberTwo) throws Exception{
+
+        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+            throw new UnsupportedMathOperationException("Defina um valor númerico!");
+        }
+
+        return (convertToDouble(numberOne) + convertToDouble(numberTwo)) / 2;
+    }
+
+    @GetMapping("/raiz/{numberOne}")
+    public Double raiz(@PathVariable String numberOne) throws Exception{
+
+        if (!isNumeric(numberOne)) {
+            throw new UnsupportedMathOperationException("Defina um valor númerico!");
+        }
+
+        Double numOne = convertToDouble(numberOne);
+        return Math.sqrt(numOne);
+    }
+
     private Double convertToDouble(String strNumber) {
         if (strNumber == null) {
             return 0D;
