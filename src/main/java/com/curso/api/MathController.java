@@ -1,6 +1,9 @@
 package com.curso.api;
 
-import org.springframework.web.bind.annotation.*;
+import com.curso.api.exceptions.UnsupportedMathOperationException;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -9,14 +12,14 @@ public class MathController {
 
     private final AtomicLong counter = new AtomicLong();
 
-    @GetMapping("/soma/{numerOne}/{numberTwo}")
-    public Double soma(@PathVariable String numerOne, @PathVariable String numberTwo) throws Exception{
+    @GetMapping("/soma/{numberOne}/{numberTwo}")
+    public Double soma(@PathVariable String numberOne, @PathVariable String numberTwo) throws Exception{
 
-        if (!isNumeric(numerOne) || !isNumeric(numberTwo)) {
-            throw new Exception();
+        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+            throw new UnsupportedMathOperationException("Defina um valor númerico!");
         }
 
-        return convertToDouble(numerOne) + convertToDouble(numberTwo);
+        return convertToDouble(numberOne) + convertToDouble(numberTwo);
     }
 
     private Double convertToDouble(String strNumber) {
