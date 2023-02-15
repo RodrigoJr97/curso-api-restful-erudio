@@ -1,6 +1,8 @@
-package com.curso.api;
+package com.curso.api.controllers;
 
+import com.curso.api.converters.ConverteNumero;
 import com.curso.api.exceptions.UnsupportedMathOperationException;
+import com.curso.api.operacoes.MatematicaSimples;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,95 +13,95 @@ import java.util.concurrent.atomic.AtomicLong;
 public class MathController {
 
     private final AtomicLong counter = new AtomicLong();
+    private final MatematicaSimples mateSimples;
+
+    public MathController(MatematicaSimples mateSimples) {
+        this.mateSimples = mateSimples;
+    }
+
 
     @GetMapping("/soma/{numberOne}/{numberTwo}")
     public Double soma(@PathVariable String numberOne, @PathVariable String numberTwo) throws Exception{
 
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+        if (!ConverteNumero.isNumeric(numberOne) || !ConverteNumero.isNumeric(numberTwo)) {
             throw new UnsupportedMathOperationException("Defina um valor númerico!");
         }
 
-        return convertToDouble(numberOne) + convertToDouble(numberTwo);
+        Double numbOneD = ConverteNumero.convertToDouble(numberOne);
+        Double numbTwoD = ConverteNumero.convertToDouble(numberTwo);
+
+        return mateSimples.soma(numbOneD, numbTwoD);
     }
 
     @GetMapping("/sub/{numberOne}/{numberTwo}")
     public Double sub(@PathVariable String numberOne, @PathVariable String numberTwo) throws Exception{
 
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+        if (!ConverteNumero.isNumeric(numberOne) || !ConverteNumero.isNumeric(numberTwo)) {
             throw new UnsupportedMathOperationException("Defina um valor númerico!");
         }
 
-        return convertToDouble(numberOne) - convertToDouble(numberTwo);
+        Double numbOneD = ConverteNumero.convertToDouble(numberOne);
+        Double numbTwoD = ConverteNumero.convertToDouble(numberTwo);
+
+        return mateSimples.subtracao(numbOneD, numbTwoD);
     }
 
     @GetMapping("/multi/{numberOne}/{numberTwo}")
     public Double multi(@PathVariable String numberOne, @PathVariable String numberTwo) throws Exception{
 
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+        if (!ConverteNumero.isNumeric(numberOne) || !ConverteNumero.isNumeric(numberTwo)) {
             throw new UnsupportedMathOperationException("Defina um valor númerico!");
         }
 
-        return convertToDouble(numberOne) * convertToDouble(numberTwo);
+        Double numbOneD = ConverteNumero.convertToDouble(numberOne);
+        Double numbTwoD = ConverteNumero.convertToDouble(numberTwo);
+
+        return mateSimples.multiplicacao(numbOneD, numbTwoD);
     }
 
     @GetMapping("/div/{numberOne}/{numberTwo}")
     public Double div(@PathVariable String numberOne, @PathVariable String numberTwo) throws Exception{
 
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+        if (!ConverteNumero.isNumeric(numberOne) || !ConverteNumero.isNumeric(numberTwo)) {
             throw new UnsupportedMathOperationException("Defina um valor númerico!");
         }
 
-        Double numOne = convertToDouble(numberOne);
-        Double numTwo = convertToDouble(numberTwo);
+        Double numbOneD = ConverteNumero.convertToDouble(numberOne);
+        Double numbTwoD = ConverteNumero.convertToDouble(numberTwo);
 
-        if (numOne == 0 || numTwo == 0) {
+        if (numbOneD == 0 || numbTwoD == 0) {
             throw new UnsupportedMathOperationException("Não é possível dividir por 0!");
         }
 
-        return numOne / numTwo;
+        return mateSimples.divisao(numbOneD, numbTwoD);
     }
 
     @GetMapping("/media/{numberOne}/{numberTwo}")
     public Double media(@PathVariable String numberOne, @PathVariable String numberTwo) throws Exception{
 
-        if (!isNumeric(numberOne) || !isNumeric(numberTwo)) {
+        if (!ConverteNumero.isNumeric(numberOne) || !ConverteNumero.isNumeric(numberTwo)) {
             throw new UnsupportedMathOperationException("Defina um valor númerico!");
         }
 
-        return (convertToDouble(numberOne) + convertToDouble(numberTwo)) / 2;
+        Double numbOneD = ConverteNumero.convertToDouble(numberOne);
+        Double numbTwoD = ConverteNumero.convertToDouble(numberTwo);
+
+        return mateSimples.media(numbOneD, numbTwoD);
     }
 
     @GetMapping("/raiz/{numberOne}")
     public Double raiz(@PathVariable String numberOne) throws Exception{
 
-        if (!isNumeric(numberOne)) {
+        if (!ConverteNumero.isNumeric(numberOne)) {
             throw new UnsupportedMathOperationException("Defina um valor númerico!");
         }
 
-        Double numOne = convertToDouble(numberOne);
-        return Math.sqrt(numOne);
+        Double numbOneD = ConverteNumero.convertToDouble(numberOne);
+
+        return mateSimples.raizQuadrada(numbOneD);
     }
 
-    private Double convertToDouble(String strNumber) {
-        if (strNumber == null) {
-            return 0D;
-        }
-        String number = strNumber.replaceAll(",", ".");
 
-        if (isNumeric(number)) {
-            return Double.parseDouble(number);
-        }
-        return 0D;
-    }
-
-    private boolean isNumeric(String strNumber) {
-        if (strNumber == null) {
-            return false;
-        }
-        String number = strNumber.replaceAll(",", ".");
-
-        return number.matches("[-+]?[0-9]*\\.?[0-9]+");
-    }
 
 
 }
