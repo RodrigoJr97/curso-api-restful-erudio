@@ -3,10 +3,9 @@ package com.curso.api.controllers;
 import com.curso.api.model.Person;
 import com.curso.api.services.PersonServices;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -24,10 +23,24 @@ public class PersonController {
         return service.findById(id);
     }
 
-    @GetMapping("/")
+    @GetMapping()
     public List<Person> findAll() throws Exception{
         return service.findAll();
     }
 
+    @PostMapping("/save")
+    public Person save(@RequestBody Person person) {
+        return service.create(person);
+    }
+
+    @PutMapping()
+    public Person update(@RequestBody Person person) {
+        return service.update(person);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable String id) throws Exception{
+        service.delete(id);
+    }
 
 }
