@@ -19,7 +19,7 @@ public class PersonController {
     // @RequestMapping(value = "/{id},
     // method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @GetMapping("/{id}")
-    public Person findById(@PathVariable String id) throws Exception{
+    public Person findById(@PathVariable Long id) throws Exception{
         return service.findById(id);
     }
 
@@ -39,8 +39,10 @@ public class PersonController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable String id) throws Exception{
+    public ResponseEntity<?> delete(@PathVariable Long id) throws Exception{
         service.delete(id);
+
+        return ResponseEntity.noContent().build();
     }
 
 }
